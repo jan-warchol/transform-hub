@@ -1,0 +1,1 @@
+Got chunk: 'Lorem ipsum ' ... 'oreet dolor\n' (len: 79)Got chunk: 'sed magna ru' ... 'dum aliquet\n' (len: 74)Got chunk: 'lobortis. Do' ... 'a vehicula.\n' (len: 80)Got chunk: 'Vivamus vest' ... 't eu dui ac\n' (len: 74)Got chunk: 'tincidunt. D' ... 'andit diam.\n' (len: 76)
