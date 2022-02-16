@@ -177,16 +177,16 @@ class Runner:
         input_stream = Stream()
         asyncio.create_task(self.connect_input_stream(input_stream))
 
-        self.logger.info("Running instance...")
-        result = self.sequence.run(context, input_stream, *args)
-
         self.logger.info(f"Sending PANG")
         monitoring = self.streams[CC.MONITORING]
         pang_provides_data = {
-            'provides': '',
-            'contentType': ''
+            'provides': self.sequence.provides(),
+            'contentType': 'text/plain'
         }
         send_encoded_msg(monitoring, msg_codes.PANG, pang_provides_data)
+
+        self.logger.info("Running instance...")
+        result = self.sequence.run(context, input_stream, *args)
 
         if asyncio.iscoroutine(result):
             result = await result
