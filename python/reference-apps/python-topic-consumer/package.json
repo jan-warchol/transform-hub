@@ -1,8 +1,8 @@
 {
-  "name": "@scramjet/topic-producer",
+  "name": "@scramjet/topic-consumer",
   "version": "0.11.0-0",
   "lang": "python",
-  "main": "./producer.py",
+  "main": "./consumer.py",
   "author": "Jan Warchoł <open-source@scramjet.org>",
   "license": "GPL-3.0",
   "repository": {
