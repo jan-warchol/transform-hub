@@ -208,14 +208,17 @@ class Runner:
 
 
     async def connect_input_stream(self, input_stream):
-        raw_headers = await self.streams[CC.IN].readuntil(b"\r\n\r\n")
-        header_list = raw_headers.decode().rstrip().split("\r\n")
-        headers = {
-            key.lower(): val for key, val in [el.split(": ") for el in header_list]
-        }
-        self.logger.info(f"Input headers: {repr(headers)}")
+        if (not hasattr(self.sequence, 'requires')):
+            raw_headers = await self.streams[CC.IN].readuntil(b"\r\n\r\n")
+            header_list = raw_headers.decode().rstrip().split("\r\n")
+            headers = {
+                key.lower(): val for key, val in [el.split(": ") for el in header_list]
+            }
+            self.logger.info(f"Input headers: {repr(headers)}")
+            input_type = headers['content-type']
+        else:
+            input_type = 'text/plain'
 
-        input_type = headers['content-type']
         if input_type == "text/plain":
             input = Stream.read_from(self.streams[CC.IN])
             self.logger.debug("Decoding input stream...")
