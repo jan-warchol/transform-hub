@@ -179,11 +179,20 @@ class Runner:
 
         self.logger.info(f"Sending PANG")
         monitoring = self.streams[CC.MONITORING]
-        pang_provides_data = {
-            'provides': self.sequence.provides(),
-            'contentType': 'text/plain'
-        }
-        send_encoded_msg(monitoring, msg_codes.PANG, pang_provides_data)
+        if (hasattr(self.sequence, 'provides')):
+            self.logger.warn("sending provides")
+            pang_data = {
+                'provides': self.sequence.provides(),
+                'contentType': 'text/plain'
+            }
+            send_encoded_msg(monitoring, msg_codes.PANG, pang_data)
+        if (hasattr(self.sequence, 'requires')):
+            self.logger.warn("sending requires")
+            pang_data = {
+                'requires': self.sequence.requires(),
+                'contentType': 'text/plain'
+            }
+            send_encoded_msg(monitoring, msg_codes.PANG, pang_data)
 
         self.logger.info("Running instance...")
         result = self.sequence.run(context, input_stream, *args)
