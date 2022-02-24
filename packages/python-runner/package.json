@@ -1,0 +1,20 @@
+{
+  "name": "@scramjet/python-runner",
+  "version": "0.17.0",
+  "description": "This package is part of Scramjet Transform Hub. The package executes user code inside a python process communicating with Transform Hub.",
+  "main": "./runner.py",
+  "scripts": {
+    "preinstall": "pip install --upgrade -r requirements.txt --target dist; cp -r ../../python/scramjet-framework/scramjet/ dist/",
+    "build": "mkdir -p dist; cp -r *.py ../../python/scramjet-framework/scramjet/ package.json dist/; yarn prepack",
+    "postbuild": "yarn prepack",
+    "prepack": "node ../../scripts/publish.js"
+  },
+  "author": "Scramjet <opensource@scramjet.org>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scramjetorg/transform-hub.git"
+  }
+}
