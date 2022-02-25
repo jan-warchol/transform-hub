@@ -183,7 +183,21 @@ const startHost = async () => {
 Given("start host", () => startHost());
 Then("stop host", () => hostUtils.stopHost());
 
+function someSystemDebug() {
+    console.log("\n/proc/loadavg\n", fs.readFileSync('/proc/loadavg', 'ascii'))
+
+    exec("pgrep node -a",  (err, stdout, stderr) => {
+        console.log(`pgrep node -a\n${stdout}`);
+    });
+
+    exec("netstat -pant | grep node",  (err, stdout, stderr) => {
+        console.log(`\nnetstat -pant | grep node\n${stdout}`);
+    });
+}
+
 Given("host is running", async () => {
+    someSystemDebug()
+
     const apiUrl = process.env.SCRAMJET_HOST_BASE_URL;
 
     if (apiUrl) {
@@ -194,6 +208,7 @@ Given("host is running", async () => {
 });
 
 Then("host is still running", async () => {
+    someSystemDebug()
     assert.ok(await hostClient.getLoadCheck());
 });
 
