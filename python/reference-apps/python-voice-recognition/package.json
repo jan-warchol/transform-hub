@@ -1,0 +1,24 @@
+{
+  "name": "@scramjet/python-voice-recognition",
+  "version": "0.18.7",
+  "main": "./main.py",
+  "author": "Raspberries <3 <open-source@scramjet.org>",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scramjetorg/transform-hub.git"
+  },
+  "engines": {
+    "python3": "3.5.0"
+  },
+  "assets": [
+    "harvard.wav"
+  ], 
+  "scripts": {
+    "build:refapps": "mkdir -p dist/__pypackages__/ && cp *.py harvard.wav dist/ && pip3 install -t dist/__pypackages__/ -r requirements.txt",
+    "postbuild:refapps": "yarn prepack && yarn packseq",
+    "packseq": "PACKAGES_DIR=python node ../../../scripts/packsequence.js",
+    "prepack": "PACKAGES_DIR=python node ../../../scripts/publish.js",
+    "clean": "rm -rf ./dist"
+  }
+}
