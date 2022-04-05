@@ -30,8 +30,9 @@ const errorHandler = (err: ClientError) => {
                 reason: err?.reason?.message,
             })
         );
-    } else {
+    } else if (err) {
         console.error(err.stack);
+
         if (err.reason) {
             console.error("Caused by:");
             console.error(err.reason.stack);

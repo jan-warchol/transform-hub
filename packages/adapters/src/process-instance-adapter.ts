@@ -126,6 +126,7 @@ IComponent {
         });
 
         if (development()) {
+            this.logger.warn("Development mode! Piping process stdio to main process");
             runnerProcess.stdout.pipe(process.stdout);
             runnerProcess.stderr.pipe(process.stderr);
         }
