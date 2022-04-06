@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { CommandDefinition } from "../../types";
 import { sessionConfig } from "../config";
+import { displayObject } from "../output";
 import { getMiddlewareClient } from "../platform";
 
 /**
@@ -35,7 +36,7 @@ export const space: CommandDefinition = (program) => {
             const mwClient = getMiddlewareClient();
             const managers = await mwClient.getManagers();
 
-            console.log(managers);
+            return displayObject(managers);
         });
 
     spaceCmd
