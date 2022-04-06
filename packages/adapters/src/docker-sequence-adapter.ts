@@ -19,6 +19,8 @@ import { isDefined, readStreamedJSON } from "@scramjet/utility";
 import { ObjLogger } from "@scramjet/obj-logger";
 import { sequencePackageJSONDecoder } from "./validate-sequence-package-json";
 
+const PACKAGE_DIR = "/package";
+
 /**
  * Adapter for preparing Sequence to be run in Docker container.
  */
@@ -92,7 +94,7 @@ class DockerSequenceAdapter implements ISequenceAdapter {
         try {
             const { streams, wait } = await this.dockerHelper.run({
                 imageName: this.config.docker.prerunner?.image || "",
-                volumes: [{ mountPoint: "/package", volume, writeable: true }],
+                volumes: [{ mountPoint: PACKAGE_DIR, volume, writeable: true }],
                 command: ["/opt/transform-hub/identify.sh"],
                 autoRemove: true,
                 maxMem: this.config.docker.prerunner?.maxMem || 0
@@ -140,7 +142,7 @@ class DockerSequenceAdapter implements ISequenceAdapter {
         try {
             runResult = await this.dockerHelper.run({
                 imageName: this.config.docker.prerunner.image || "",
-                volumes: [{ mountPoint: "/package", volume: volumeId, writeable: true }],
+                volumes: [{ mountPoint: PACKAGE_DIR, volume: volumeId, writeable: true }],
                 autoRemove: true,
                 maxMem: this.config.docker.prerunner.maxMem || 0
             });
@@ -226,6 +228,7 @@ class DockerSequenceAdapter implements ISequenceAdapter {
             version: validPackageJson.version || "",
             engines,
             config,
+            sequenceDir: PACKAGE_DIR,
             entrypointPath: validPackageJson.main,
             id: volumeId
         };
