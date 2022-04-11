@@ -78,9 +78,9 @@ export class ServiceDiscovery {
 
     createTopicsRouter() {
         this.router.downstream("/:topic", async (req) => {
-            const contentType = req.headers["content-type"] || "";
             const { topic } = req.params || {};
-            const { cpm } = req.headers;
+            const contentType = req.headers["content-type"] || "";
+            const cpmRequest = req.headers["cpm"] === "true";
 
             this.logger.debug(`Incoming topic '${topic}' request`);
             let target = this.getByTopic(topic);
@@ -94,7 +94,7 @@ export class ServiceDiscovery {
 
             pipeToTopic(req, target);
 
-            if (!cpm) {
+            if (!cpmRequest) {
                 this.update({
                     provides: topic, contentType: contentType, topicName: topic });
             } else {
@@ -104,12 +104,12 @@ export class ServiceDiscovery {
         }, { checkContentType: false });
 
         this.router.upstream("/:topic", (req) => {
+            const { topic } = req.params || {};
             //TODO: what should be the default content type and where to store this information?
             const contentType = req.headers["content-type"] || "application/x-ndjson";
-            const { topic } = req.params || {};
-            const { cpm } = req.headers;
+            const cpmRequest = req.headers["cpm"] === "true";
 
-            if (!cpm) {
+            if (!cpmRequest) {
                 this.update({
                     requires: topic, contentType, topicName: topic });
             } else {
