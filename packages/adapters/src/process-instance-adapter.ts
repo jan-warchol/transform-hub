@@ -12,6 +12,7 @@ import {
 import { ChildProcess, spawn } from "child_process";
 
 import path from "path";
+import { PassThrough } from "stream";
 
 const isTSNode = !!(process as any)[Symbol.for("ts-node.register.instance")];
 const gotPython = "\n                              _ \n __      _____  _ __  ___ ___| |\n \\ \\ /\\ / / _ \\| '_ \\/ __|_  / |\n  \\ V  V / (_) | | | \\__ \\/ /|_|\n   \\_/\\_/ \\___/|_| |_|___/___(_)  🐍\n";
@@ -125,9 +126,13 @@ IComponent {
             }
         });
 
+        const ps = new PassThrough();
         if (development()) {
             runnerProcess.stdout.pipe(process.stdout);
             runnerProcess.stderr.pipe(process.stderr);
+        } else {
+            runnerProcess.stdout.pipe(ps);
+            runnerProcess.stderr.pipe(ps);
         }
 
         this.logger.trace("Runner process is running", runnerProcess.pid);
@@ -150,8 +155,7 @@ IComponent {
         if (statusCode > 0) {
             this.logger.debug("Process returned non-zero status code", statusCode);
             this.logger.debug("forwarding output", statusCode);
-            runnerProcess.stdout.pipe(process.stdout);
-            runnerProcess.stderr.pipe(process.stderr);
+            ps.pipe(process.stdout);
         }
 
         return statusCode;
