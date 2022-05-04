@@ -149,6 +149,9 @@ IComponent {
 
         if (statusCode > 0) {
             this.logger.debug("Process returned non-zero status code", statusCode);
+            this.logger.debug("forwarding output", statusCode);
+            runnerProcess.stdout.pipe(process.stdout);
+            runnerProcess.stderr.pipe(process.stderr);
         }
 
         return statusCode;
